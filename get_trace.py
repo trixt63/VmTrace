@@ -1,11 +1,12 @@
 import os
 import sys
-sys.path.append(os.path.dirname(sys.path[0]))
-
+from dotenv import load_dotenv
 import json
-# from ethereumetl.json_rpc_requests import generate_trace_transaction_json_rpc
-# from ethereumetl.utils import rpc_response_to_result
+sys.path.append(os.path.dirname(sys.path[0]))
 from rpc import BatchHTTPProvider
+
+
+load_dotenv()
 
 
 def is_retriable_error(error_code):
