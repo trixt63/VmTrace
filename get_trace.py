@@ -29,7 +29,7 @@ def _generate_json_rpc(method, params, request_id=1):
     }
 
 
-def generate_trace_transaction_json_rpc(tx_hashes: list[str]):
+def _generate_trace_transaction_json_rpc(tx_hashes: list[str]):
     """Get op code from tx hashes, by calling 'debug_traceTransaction'.
     Currently, Chainnodes.org's free tier offer support for this function"""
     for idx, tx_hash in enumerate(tx_hashes):
@@ -47,7 +47,7 @@ def get_vm_traces(tx_hashes: list[str]) -> dict[str, str]:
     provider_url = 'https://mainnet.chainnodes.org/YOUR-API-KEY'
 
     _batch_provider = BatchHTTPProvider(provider_url)
-    trace_tx_rpc = list(generate_trace_transaction_json_rpc(tx_hashes))
+    trace_tx_rpc = list(_generate_trace_transaction_json_rpc(tx_hashes))
 
     responses = _batch_provider.make_batch_request(json.dumps(trace_tx_rpc))
 
