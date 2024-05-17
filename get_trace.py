@@ -20,7 +20,7 @@ load_dotenv()
 #     return False
 
 
-def generate_json_rpc(method, params, request_id=1):
+def _generate_json_rpc(method, params, request_id=1):
     return {
         'jsonrpc': '2.0',
         'method': method,
@@ -33,7 +33,7 @@ def generate_trace_transaction_json_rpc(tx_hashes: list[str]):
     """Get op code from tx hashes, by calling 'debug_traceTransaction'.
     Currently, Chainnodes.org's free tier offer support for this function"""
     for idx, tx_hash in enumerate(tx_hashes):
-        yield generate_json_rpc(
+        yield _generate_json_rpc(
             method='debug_traceTransaction',
             params=[
                 tx_hash,
