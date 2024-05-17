@@ -9,15 +9,15 @@ from rpc import BatchHTTPProvider
 load_dotenv()
 
 
-def is_retriable_error(error_code):
-    if error_code is None:
-        return False
-    if not isinstance(error_code, int):
-        return False
-    # https://www.jsonrpc.org/specification#error_object
-    if error_code == -32603 or (-32000 >= error_code >= -32099):
-        return True
-    return False
+# def _is_retriable_error(error_code):
+#     if error_code is None:
+#         return False
+#     if not isinstance(error_code, int):
+#         return False
+#     # https://www.jsonrpc.org/specification#error_object
+#     if error_code == -32603 or (-32000 >= error_code >= -32099):
+#         return True
+#     return False
 
 
 def generate_json_rpc(method, params, request_id=1):
