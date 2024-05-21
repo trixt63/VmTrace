@@ -1,25 +1,26 @@
 import os
 import sys
-sys.path.append(os.path.dirname(sys.path[0]))
-
+from dotenv import load_dotenv
 import json
-# from ethereumetl.json_rpc_requests import generate_trace_transaction_json_rpc
-# from ethereumetl.utils import rpc_response_to_result
+sys.path.append(os.path.dirname(sys.path[0]))
 from rpc import BatchHTTPProvider
 
 
-def is_retriable_error(error_code):
-    if error_code is None:
-        return False
-    if not isinstance(error_code, int):
-        return False
-    # https://www.jsonrpc.org/specification#error_object
-    if error_code == -32603 or (-32000 >= error_code >= -32099):
-        return True
-    return False
+load_dotenv()
 
 
-def generate_json_rpc(method, params, request_id=1):
+# def _is_retriable_error(error_code):
+#     if error_code is None:
+#         return False
+#     if not isinstance(error_code, int):
+#         return False
+#     # https://www.jsonrpc.org/specification#error_object
+#     if error_code == -32603 or (-32000 >= error_code >= -32099):
+#         return True
+#     return False
+
+
+def _generate_json_rpc(method, params, request_id=1):
     return {
         'jsonrpc': '2.0',
         'method': method,
@@ -28,11 +29,11 @@ def generate_json_rpc(method, params, request_id=1):
     }
 
 
-def generate_trace_transaction_json_rpc(tx_hashes: list[str]):
+def _generate_trace_transaction_json_rpc(tx_hashes: list[str]):
     """Get op code from tx hashes, by calling 'debug_traceTransaction'.
     Currently, Chainnodes.org's free tier offer support for this function"""
     for idx, tx_hash in enumerate(tx_hashes):
-        yield generate_json_rpc(
+        yield _generate_json_rpc(
             method='debug_traceTransaction',
             params=[
                 tx_hash,
@@ -46,7 +47,7 @@ def get_vm_traces(tx_hashes: list[str]) -> dict[str, str]:
     provider_url = 'https://mainnet.chainnodes.org/YOUR-API-KEY'
 
     _batch_provider = BatchHTTPProvider(provider_url)
-    trace_tx_rpc = list(generate_trace_transaction_json_rpc(tx_hashes))
+    trace_tx_rpc = list(_generate_trace_transaction_json_rpc(tx_hashes))
 
     responses = _batch_provider.make_batch_request(json.dumps(trace_tx_rpc))
 
