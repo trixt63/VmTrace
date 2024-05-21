@@ -52,15 +52,12 @@ def get_vm_traces(tx_hashes: list[str]) -> dict[str, str]:
     responses = _batch_provider.make_batch_request(json.dumps(trace_tx_rpc))
 
     opcodes_dict: dict = dict()
-    try:
-        for response_item in responses:
-            result = response_item.get('result', None)  # there might be errors, need retrying
+    for response_item in responses:
+        result = response_item.get('result', None)  # there might be errors, need retrying
 
-            op_code = result['structLogs']
-            opcodes_dict[tx_hashes[response_item['id']]] = op_code
+        op_code = result['structLogs']
+        opcodes_dict[tx_hashes[response_item['id']]] = op_code
 
-    except Exception as ex:
-        raise ex
 
     return opcodes_dict
 
