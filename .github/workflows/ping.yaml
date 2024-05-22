@@ -6,6 +6,7 @@ on:
       - develop
       - main
   repository_dispatch:
+    types: [pong]
 
 jobs:
   ping-pong:
