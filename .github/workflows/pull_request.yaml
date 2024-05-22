@@ -1,0 +1,29 @@
+name: Pull Request Ping
+
+on:
+  pull_request:
+    branches:
+      - develop
+  repository_dispatch:
+    types: [pong-pr]
+
+jobs:
+  ping-pong:
+    runs-on: ubuntu-latest
+    steps:
+      - name: PING on pull request
+        if: github.event.action != 'pong-pr'
+        run: |
+          curl -X POST https://api.github.com/repos/trixt63/AirflowFirstCode/dispatches \
+          -H 'Accept: application/vnd.github.everest-preview+json' \
+          -u ${{ secrets.ACCESS_TOKEN }} \
+          --data '{"event_type": "ping-pr", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
+
+      - name: ACK - Acknowledge pong from remote repository
+        if: github.event.action == 'pong-pr'
+        run: |
+          echo "PONG received from '${{ github.event.client_payload.repository }}'" && \
+          curl -X POST https://api.github.com/repos/trixt63/AirflowFirstCode \
+          -H 'Accept: application/vnd.github.everest-preview+json' \
+          -u ${{ secrets.ACCESS_TOKEN }} \
+          --data '{"event_type": "ack", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
