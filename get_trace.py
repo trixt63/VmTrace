@@ -37,7 +37,6 @@ def _generate_trace_transaction_json_rpc(tx_hashes: list[str]):
             method='debug_traceTransaction',
             params=[
                 tx_hash,
-                # {'tracer': 'prestateTracer'}
             ],
             request_id=idx
         )
