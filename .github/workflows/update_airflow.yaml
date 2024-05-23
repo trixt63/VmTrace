@@ -23,7 +23,7 @@ jobs:
 #          }'
 
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Configure Git
         run: |
@@ -35,16 +35,17 @@ jobs:
           git clone https://trixt63:${{ secrets.ACCESS_TOKEN }}@github.com/trixt63/AirflowFirstCode.git
           cd AirflowFirstCode
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
-          echo $BRANCH_NAME
-#          git checkout $BRANCH_NAME
-#          git submodule update --init --recursive
+          git checkout $BRANCH_NAME
+          git submodule update --init --recursive
 
-#      - name: Commit and push changes
-#        run: |
-#          cd AirflowFirstCode/dags/modules/VmTrace
-#          git switch main
-#          git pull
-#          cd ../../../
-#          git add .
-#          git commit -m "Update VmTrace's branch main to latest commit"
-#          git push https://trixt63:${{ secrets.ACCESS_TOKEN }}@github.com/trixt63/AirflowFirstCode.git main
+      - name: Commit and push changes
+        run: |
+          REPO_NAME=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)
+          BRANCH=${GITHUB_REF#refs/heads/}
+          cd AirflowFirstCode/dags/modules/$REPO_NAME
+          git switch $BRANCH
+          git pull
+          cd ../
+          git add .
+          git commit -m "Update $REPO_NAME's branch $BRANCH to latest commit"
+          git push https://trixt63:${{ secrets.ACCESS_TOKEN }}@github.com/trixt63/AirflowFirstCode.git main
