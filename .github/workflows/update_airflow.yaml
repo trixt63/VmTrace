@@ -38,9 +38,10 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          ls ./
-#          cd dags/modules/VmTrace
-#          cd ../../../
-#          git add .
-#          git commit -m "Update VmTrace submodule to latest commit"
-#          git push https://trixt63:${{ secrets.ACCESS_TOKEN }}@github.com/trixt63/AirflowFirstCode.git main
+          cd AirflowFirstCode/dags/modules/VmTrace
+          git switch main
+          git pull
+          cd ../../../
+          git add .
+          git commit -m "Update VmTrace's branch main to latest commit"
+          git push https://trixt63:${{ secrets.ACCESS_TOKEN }}@github.com/trixt63/AirflowFirstCode.git main
