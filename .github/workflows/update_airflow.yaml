@@ -10,14 +10,37 @@ jobs:
   update-in-airflow:
     runs-on: ubuntu-latest
     steps:
-      - name: Send info to Airflow repo
+#      - name: Send info to Airflow repo
+#        run: |
+#          curl -X POST https://api.github.com/repos/trixt63/AirflowFirstCode/dispatches \
+#          -H 'Accept: application/vnd.github.everest-preview+json' \
+#          -u ${{ secrets.ACCESS_TOKEN }} \
+#          --data '{
+#            "event_type": "update-submodule",
+#            "client_payload": {
+#              "repository": "'"$GITHUB_REPOSITORY"'"
+#            }
+#          }'
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Configure Git
         run: |
-          curl -X POST https://api.github.com/repos/trixt63/AirflowFirstCode/dispatches \
-          -H 'Accept: application/vnd.github.everest-preview+json' \
-          -u ${{ secrets.ACCESS_TOKEN }} \
-          --data '{
-            "event_type": "update-submodule", 
-            "client_payload": { 
-              "repository": "'"$GITHUB_REPOSITORY"'" 
-            }
-          }'
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Clone airflow repository
+        run: |
+          git clone https://github.com/trixt63/AirflowFirstCode.git
+          cd airflow
+          git checkout main
+          git submodule update --init --remote --merge
+
+      - name: Commit and push changes
+        run: |
+          cd dags/modules/VmTrace
+          cd ../../../
+          git add .
+          git commit -m "Update VmTrace submodule to latest commit"
+          git push https://trixt63:${{ secrets.ACCESS_TOKEN }}@github.com/trixt63/AirflowFirstCode.git main
