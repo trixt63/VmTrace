@@ -9,7 +9,7 @@ from rpc import BatchHTTPProvider
 load_dotenv()
 
 
-def _is_retriable_error(error_code):
+def _is_retryable_error(error_code):
     if error_code is None:
         return False
     if not isinstance(error_code, int):
