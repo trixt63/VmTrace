@@ -3,7 +3,6 @@ name: Update Airflow workflow
 on:
   push:
     branches:
-      - develop
       - main
 
 jobs:
@@ -33,7 +32,7 @@ jobs:
       - name: Clone airflow repository
         run: |
           git clone https://trixt63:${{ secrets.ACCESS_TOKEN }}@github.com/trixt63/AirflowFirstCode.git
-          cd airflow
+          cd AirflowFirstCode
           git checkout main
           git submodule update --init --remote --merge
 
