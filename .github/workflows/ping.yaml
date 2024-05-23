@@ -1,10 +1,10 @@
 name: Remote Dispatch Action Initiator
 
 on:
-  push:
-    branches:
-      - develop
-      - main
+#  push:
+#    branches:
+#      - develop
+#      - main
   repository_dispatch:
     types: [pong]
 
