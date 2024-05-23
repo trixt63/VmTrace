@@ -58,7 +58,6 @@ def get_vm_traces(tx_hashes: list[str]) -> dict[str, str]:
         op_code = result['structLogs']
         opcodes_dict[tx_hashes[response_item['id']]] = op_code
 
-
     return opcodes_dict
 
 
